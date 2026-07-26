@@ -31,3 +31,12 @@ mdui-dialog {
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
+
+/* Subtitles styling */
+video::cue {
+  font-size: 18px;
+  color: #fff;
+  text-shadow: 0 0 6px rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.25);
+  line-height: 1.2;
+}
