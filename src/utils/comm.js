@@ -8,7 +8,7 @@ export class Comm {
             .split("&")
             .reduce((acc, curr) => {
               const [key, value] = curr.split("=");
-              acc[key] = value;
+              acc[key] = value ? decodeURIComponent(value) : value;
               return acc;
             }, {})
         : null,
@@ -48,6 +48,13 @@ export class Comm {
     shutdown() {
       return "shutdown";
     },
+    // 新增：广播字幕（content 请传原始文本，方法内部会做 Base64 + URI encode）
+    subtitles(name, content) {
+      const b64 = typeof window !== "undefined"
+        ? window.btoa(unescape(encodeURIComponent(content)))
+        : Buffer.from(content, "utf-8").toString("base64");
+      return `subtitles|name=${encodeURIComponent(name)}&content=${encodeURIComponent(b64)}`;
+    },
   };
   client = {
     greet(guestID) {
@@ -73,6 +80,13 @@ export class Comm {
     },
     shutdown() {
       return "shutdown";
+    },
+    // client 端也可能发送字幕
+    subtitles(name, content) {
+      const b64 = typeof window !== "undefined"
+        ? window.btoa(unescape(encodeURIComponent(content)))
+        : Buffer.from(content, "utf-8").toString("base64");
+      return `subtitles|name=${encodeURIComponent(name)}&content=${encodeURIComponent(b64)}`;
     },
   };
 }
